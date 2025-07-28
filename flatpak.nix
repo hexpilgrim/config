@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   flatpakApps = [
@@ -17,7 +17,7 @@ let
     { name = "Steam";                 ref = "com.valvesoftware.Steam";          sha256 = "1yqbmmvm19xyzwcrxkrpq4vrkwz631w1h9jyzrbbpksa2fl2hrvn"; }
     { name = "Flatseal";              ref = "com.github.tchx84.Flatseal";       sha256 = "00kvi432gdrhyyhz34vs00398c77lzji1qgvchfrs1kxxp84bbbi"; }
     { name = "Heroic Games Launcher"; ref = "com.heroicgameslauncher.hgl";      sha256 = "1j1gmin4wpczlkcbl18ka9vg51cndsamx3ka696a8wq0a85b10g7"; }
-    { name = "Visual Studio Code";    ref = "com.visualstudio.code";            sha256 = "0sc7x13vm7zfxcssv7a2vlxjwpf0f0rvvw5xa65mrzqjisrrk6i1"; }
+#   { name = "Visual Studio Code";    ref = "com.visualstudio.code";            sha256 = "0sc7x13vm7zfxcssv7a2vlxjwpf0f0rvvw5xa65mrzqjisrrk6i1"; }
     { name = "qBittorrent";           ref = "org.qbittorrent.qBittorrent";      sha256 = "0pz76q30q0l9ih6xm1izjb7j7gz88fv2vrm8w9jk2gjgm2ka30h1"; }
     { name = "ONLYOFFICE";            ref = "org.onlyoffice.desktopeditors";    sha256 = "1mkxf5xcxiy55v9yhd8hh9qq73al6bkjkd2calbdg9n015wqa9cp"; }
     { name = "ProtonPlus";            ref = "com.vysp3r.ProtonPlus";            sha256 = "15s29jb0zs1gk090zw80s2nyh73pfh3jbhahrdbfip0g8xnib0aw"; }
