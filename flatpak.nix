@@ -34,7 +34,6 @@ let
     { name = "Simple Scan";           ref = "org.gnome.SimpleScan";             sha256 = "08yh90lhv2glbvgxja4d36zwj29hxn1cyqrkz26q6q5innpzcf1n"; }
     { name = "Calendar";              ref = "org.gnome.Calendar";               sha256 = "0941ypnyrk6ydwrmcmhxhlya8nv2vnvhqhp25h4xhg6csx70ja5c"; }
     { name = "Logs";                  ref = "org.gnome.Logs";                   sha256 = "1f8fs2rda86268s3gmni65m90d550jyclvnkqsfk154l6f3h1vrv"; }
-    { name = "Spotify";               ref = "com.spotify.Client";               sha256 = "14jg61aqv9anqgi8c00pgrc18g0d9b9y6dkjc90fmvmal4wym59x"; }
     { name = "Audio Player";          ref = "org.gnome.Decibels";               sha256 = "0aqbaqrx7lvsna16xw144k1yd25cry3s8g2ry2rjc30n2wx5w2vn"; }
     { name = "File Roller";           ref = "org.gnome.FileRoller";             sha256 = "0sn72j6df1g1vn949xgjcmmswg8ijb4axd2p6275sl6v66wa61bz"; }
   ];

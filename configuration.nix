@@ -5,12 +5,20 @@ let
     url = "https://github.com/gmodena/nix-flatpak/archive/refs/heads/main.tar.gz";
     sha256 = "030qz6kf97vx4bk0vmgbq23kv7j9xry2mc1z96bw6cmdljf2prm0";
   };
+
+  spicetify-nix = import (builtins.fetchTarball {
+    url = "https://github.com/Gerg-L/spicetify-nix/archive/master.tar.gz";
+    sha256 = "0hgl0lk8xld01cfr9nhhfbfa2qpjb70is194w7987bi4az4al3rv";
+  }) {};
+
+  spicePkgs = spicetify-nix.packages;
 in 
 {
   imports = [ 
     ./hardware-configuration.nix 
     ./flatpak.nix
     "${nix-flatpak}/modules/nixos.nix"
+    spicetify-nix.nixosModules.spicetify
   ];
 
   # Bootloader.
@@ -24,6 +32,12 @@ in
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  fileSystems."/mnt/Backups" = {
+    device = "LABEL=Backups";
+    fsType = "auto";
+    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
+  };
 
   networking = {
     hostName = "nixos";
@@ -97,6 +111,38 @@ in
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  programs.spicetify = {
+    enable = true;
+
+    enabledExtensions = with spicePkgs.extensions; [
+      adblock
+      hidePodcasts
+      shuffle
+    ];
+
+    enabledCustomApps = with spicePkgs.apps; [
+      lyricsPlus
+      newReleases
+    ];
+
+    enabledSnippets = with spicePkgs.snippets; [
+      autoHideFriends
+      modernScrollbar
+      hideNowPlayingViewButton
+      hideFriendActivityButton
+      hideMiniPlayerButton
+    ] ++ [
+      ''
+        [aria-label="All"],
+        [aria-label="Music"],
+        [aria-label="Podcasts"],
+        [aria-label="Audiobooks"] {
+          display: none !important;
+        }
+      ''
+    ];
+  };
 
   programs.gnupg.agent = {
     enable = true;
