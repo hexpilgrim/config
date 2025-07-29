@@ -1,0 +1,18 @@
+servers:
+  - configuration: nixos
+    path: ./configuration.nix
+    deployment:
+      type: on-branch
+      branch: main
+
+  - configuration: nixos
+    path: ./configuration.nix
+    deployment:
+      type: on-branch
+      branch: testing
+
+#  - configuration: macos
+#    path: ./configuration.nix
+#    deployment:
+#      type: on-branch
+#      branch: darwin

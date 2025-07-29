@@ -1,38 +1,34 @@
-{ ... }:
-
+# configuration.nix
 let
-  nix-flatpak = builtins.fetchTarball {
-    url = "https://github.com/gmodena/nix-flatpak/archive/refs/heads/main.tar.gz";
-    sha256 = "030qz6kf97vx4bk0vmgbq23kv7j9xry2mc1z96bw6cmdljf2prm0";
+  # Import user metadata to pass into modules
+  user = import ./user.nix;
+in
+{ config, pkgs, lib, ... }:
+
+{
+  # Load modular system config and hardware details
+  imports =
+    import ./modules { inherit pkgs config user lib; }
+    ++ [ ./hardware-configuration.nix ];
+
+  # Enable advanced Nix tooling
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+
+  # Enable X11 and GNOME desktop environment
+  services.xserver = {
+    enable = true;
+    xkb.layout = "gb";
+    xkb.variant = "";
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
   };
 
-  spicetify-nix = import (builtins.fetchTarball {
-    url = "https://github.com/Gerg-L/spicetify-nix/archive/master.tar.gz";
-    sha256 = "0hgl0lk8xld01cfr9nhhfbfa2qpjb70is194w7987bi4az4al3rv";
-  }) { };
+  services.printing.enable = true;
 
-  spicePkgs = spicetify-nix.packages;
-in
-{
+  # Declarative activation of Cloudflare WARP daemon
+#  services.cloudflare-warp-daemon.enable = true;
 
-  _module.args.spicePkgs = spicePkgs;
-
-  imports = builtins.concatLists [
-    (import ./services)
-    [
-      ./hardware-configuration.nix
-      ./flatpak.nix
-      ./boot.nix
-      ./networking.nix
-      ./locale.nix
-      ./users.nix
-      ./filesystem.nix
-      ./programs.nix
-      ./packages.nix
-      ./system.nix
-      ./modules/spicetify.nix
-      "${nix-flatpak}/modules/nixos.nix"
-      spicetify-nix.nixosModules.spicetify
-    ]
-  ];
+  # Set system version for compatibility
+  system.stateVersion = "25.05";
 }
