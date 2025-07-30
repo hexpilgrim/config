@@ -1,5 +1,5 @@
 # modules/maintenance.nix
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   # Automatically upgrade the system using NixOS channel updates

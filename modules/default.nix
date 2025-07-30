@@ -1,33 +1,32 @@
 # modules/default.nix
-{ pkgs, config, user, lib, ... }:
+{ pkgs, user, lib, ... }:
 
 let
-  commonArgs = { inherit pkgs config; };
-  userArgs   = { inherit pkgs config user; };
-
-  # List of modules accepting only pkgs + config
-  modulesWithCommonArgs = [
-    "boot"
-    "locale"
-    "audio"
-    "maintenance"
-    "gaming"
-    "cursor"
-    "nix-ld"
-  ];
-
-  # Import each module with commonArgs
-  modules = builtins.map
-    (name: import ./${name}.nix commonArgs)
-    modulesWithCommonArgs;
+  libArgs       = { inherit pkgs lib; };
+  libOnlyArgs   = { inherit lib; };
+  userArgs      = { inherit user; };
+# fullUserArgs = { inherit pkgs user; };
 
 in
-   # Concatenate all modules into final config list
-  modules ++ [
-    (import ./packages.nix { inherit pkgs; })
-    (import ./networking.nix { inherit pkgs config lib; } )
-    (import ./users.nix userArgs)
-    ./scripts
-    ./services
-    #(import ./mount-google-drive.nix userArgs)
-  ]
+[
+  # Modules with no arguments (just `{ ... }`)
+  ./locale.nix
+  ./audio.nix
+  ./maintenance.nix
+  ./gaming.nix
+  ./cursor.nix
+  ./nix-ld.nix
+
+  # Modules requiring minimal arguments
+  (import ./packages.nix { inherit pkgs; })
+  (import ./boot.nix libArgs)
+  (import ./networking.nix libOnlyArgs)
+  (import ./users.nix userArgs)
+
+  # Module directories
+  ./scripts
+  ./services
+
+  # Optional user module
+# (import ./mount-google-drive.nix fullUserArgs)
+]

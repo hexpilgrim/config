@@ -1,5 +1,5 @@
 # modules/mount-google-drive.nix
-{ config, pkgs, user, ... }:
+{ pkgs, user, ... }:
 
 let
   home = "/home/${user.username}";

@@ -1,5 +1,5 @@
 # modules/cursor.nix
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = [

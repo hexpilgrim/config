@@ -1,20 +1,26 @@
 # home.nix
-{ pkgs, lib, spicetify-nix, system, user, ... }:
+{ pkgs, lib, spicetify-nix, user, system, ... }:
 
 {
   # Import full user-specific Home Manager config from ./home/*
   # This allows separation between user identity (username, dir)
   # and system-affecting user configuration like Spicetify, GTK, etc.
   # It also allows ./home to stay reusable across hosts or bootstraps.
-  imports = [ (import ./home { inherit pkgs spicetify-nix system lib; }) ];
+  imports = [ (import ./home { inherit pkgs lib spicetify-nix system; }) ];
   
   home.username = user.username;
   home.homeDirectory = "/home/${user.username}";
 
   # Bootstrap Home Manager functionality
   programs.home-manager.enable = true;
-
   programs.bash.enable = true;
+
+  # Inject the nixos-rebuild wrapper function
+  programs.bash.shellInit = ''
+    nixos-rebuild() {
+      IS_LOCAL_BUILD=1 command nixos-rebuild "$@"
+    }
+  '';
 
   # Load Home Manager shell hooks on login (avoids hardcoded sourcing in .bashrc)
   home.file.".bashrc".text = ''

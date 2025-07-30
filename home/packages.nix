@@ -1,5 +1,5 @@
 # home/packages.nix
-{ pkgs, system, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [

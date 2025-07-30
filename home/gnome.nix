@@ -1,5 +1,5 @@
 # home/gnome.nix
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
 	programs.gnome-shell.enable = true;

@@ -1,5 +1,5 @@
 # modules/gaming.nix
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # Configure Steam with runtime and network options

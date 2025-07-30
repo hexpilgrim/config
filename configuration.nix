@@ -8,8 +8,7 @@ in
 {
   # Load modular system config and hardware details
   imports =
-    import ./modules { inherit pkgs config user lib; }
-    ++ [ ./hardware-configuration.nix ];
+    import ./modules { inherit pkgs config user lib; };
 
   # Enable advanced Nix tooling
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

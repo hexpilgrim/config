@@ -1,13 +1,25 @@
 # home/default.nix
 { pkgs, lib, spicetify-nix, system, ... }:
 
-{
-  imports = [
-    (import ./packages.nix { inherit pkgs system; })
-    (import ./spicetify.nix { inherit pkgs spicetify-nix system; })
-    (import ./gnome.nix { inherit pkgs lib; })
-    (import ./firefox.nix { inherit pkgs; })
-    (import ./gaming.nix { inherit pkgs; })
-    #./mount-google-drive.nix # inherit config, pkgs
+let
+  commonArgs = { inherit pkgs; };
+  spicetifyArgs = { inherit pkgs spicetify-nix system; };
+  gnomeArgs = { inherit pkgs lib; };
+
+  modulesWithCommonArgs = [
+    "packages"
+    "firefox"
+    "gaming"
+  ];
+
+  mappedModules = builtins.map
+    (name: import ./${name}.nix commonArgs)
+    modulesWithCommonArgs;
+
+in {
+  imports = mappedModules ++ [
+    (import ./spicetify.nix spicetifyArgs)
+    (import ./gnome.nix gnomeArgs)
+#   ./mount-google-drive.nix
   ];
 }

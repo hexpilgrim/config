@@ -1,5 +1,5 @@
 # modules/users.nix
-{ config, pkgs, user, ... }:
+{ user, ... }:
 
 {
   users.users.${user.username} = {

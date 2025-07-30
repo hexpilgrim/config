@@ -32,6 +32,7 @@
         
         modules = [
           ./configuration.nix
+          ./hardware-configuration.nix
           
           # Integrate Home Manager into NixOS module system
           home-manager.nixosModules.home-manager
@@ -42,7 +43,7 @@
             
             # Load user-specific home configuration
             home-manager.users.${user.username} = import ./home.nix {
-              inherit pkgs spicetify-nix system user;
+              inherit pkgs spicetify-nix user system;
               lib = inputs.home-manager.lib;
             };
           }

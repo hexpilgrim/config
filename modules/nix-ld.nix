@@ -1,4 +1,5 @@
-{ config, pkgs, ... }:
+# modules/nix-ld.nix
+{ pkgs, ... }:
 
 {
   programs.nix-ld.enable = true;
