@@ -1,5 +1,5 @@
 # modules/default.nix
-{ pkgs, user, lib, ... }:
+{ config, pkgs, user, lib, ... }:
 
 let
   libArgs       = { inherit pkgs lib; };

@@ -15,17 +15,8 @@
   programs.home-manager.enable = true;
   programs.bash.enable = true;
 
-  # Inject the nixos-rebuild wrapper function
-  programs.bash.shellInit = ''
-    nixos-rebuild() {
-      IS_LOCAL_BUILD=1 command nixos-rebuild "$@"
-    }
-  '';
-
   # Load Home Manager shell hooks on login (avoids hardcoded sourcing in .bashrc)
   home.file.".bashrc".text = ''
-  # Loads Home Manager environment hooks (such as shellInit)
-  # Required for aliases and exported paths defined in Home Manager modules
     [ -f "$HOME/.local/state/home-manager/environment" ] && source "$HOME/.local/state/home-manager/environment"
   '';
 

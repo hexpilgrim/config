@@ -44,7 +44,7 @@
             # Load user-specific home configuration
             home-manager.users.${user.username} = import ./home.nix {
               inherit pkgs spicetify-nix user system;
-              lib = inputs.home-manager.lib;
+              lib = pkgs.lib;
             };
           }
         ];
