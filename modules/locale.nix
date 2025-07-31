@@ -1,5 +1,7 @@
 # modules/locale.nix
-{ ... }:
+{
+  ...
+}:
 
 {
   time.timeZone = "Europe/London";
@@ -19,4 +21,3 @@
 
   console.keyMap = "uk";
 }
-

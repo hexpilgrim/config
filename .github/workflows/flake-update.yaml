@@ -1,0 +1,58 @@
+name: update-flakes
+
+on:
+  schedule:
+    - cron: '0 */4 * * 1-5'  # Every 4 hours, Monday through Friday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  get-flake-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+      flake-inputs: ${{ steps.get-flake-inputs.outputs.flake-inputs }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: flake.lock
+
+      - name: Extract flake inputs
+        id: get-flake-inputs
+        run: |
+          flake_inputs="$(jq -c '.nodes.root.inputs | {flake: keys}' flake.lock)"
+          echo "flake-inputs=${flake_inputs}" >> "$GITHUB_OUTPUT"
+
+  update-flake:
+    name: update-${{ matrix.flake }}
+    runs-on: ubuntu-latest
+    needs: get-flake-inputs
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.get-flake-inputs.outputs.flake-inputs) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: DeterminateSystems/nix-installer-action@v19
+        with:
+          extra-conf: accept-flake-config = true
+
+      - name: Configure Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Update input with flake-update-action
+        uses: cpcloud/flake-update-action@v2.0.1
+        with:
+          dependency: ${{ matrix.flake }}
+          github-token: ${{ secrets.GH_TOKEN }}
+          pull-request-token: ${{ secrets.GH_TOKEN }}
+          pull-request-author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          pull-request-branch-prefix: update-
+          delete-branch: true
+          automerge: true

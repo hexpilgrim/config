@@ -1,5 +1,8 @@
 # home/gaming.nix
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   # Force RADV Vulkan driver for AMD GPUs
@@ -15,4 +18,3 @@
     mangojuice
   ];
 }
-

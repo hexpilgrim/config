@@ -3,14 +3,29 @@ let
   # Import user metadata to pass into modules
   user = import ./user.nix;
 in
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Load modular system config and hardware details
-  imports = import ./modules { inherit pkgs config user lib; };
+  imports = import ./modules {
+    inherit
+      pkgs
+      config
+      user
+      lib
+      ;
+  };
 
   # Enable advanced Nix tooling
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
 
   # Enable X11 and GNOME desktop environment
@@ -24,8 +39,13 @@ in
 
   services.printing.enable = true;
 
+  # Reduces wait time to 15 seconds
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=15s
+  '';
+
   # Declarative activation of Cloudflare WARP daemon
-#  services.cloudflare-warp-daemon.enable = true;
+  # services.cloudflare-warp-daemon.enable = true;
 
   # Set system version for compatibility
   system.stateVersion = "25.05";

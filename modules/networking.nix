@@ -1,5 +1,8 @@
 # modules/networking.nix
-{ lib, ... }:
+{
+  lib,
+  ...
+}:
 
 {
   networking = {
@@ -8,5 +11,6 @@
     interfaces.wlp10s0.useDHCP = lib.mkForce true;
     firewall.enable = true;
   };
-}
 
+  hardware.enableRedistributableFirmware = true;
+}

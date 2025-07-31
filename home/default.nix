@@ -1,5 +1,11 @@
 # home/default.nix
-{ pkgs, lib, spicetify-nix, system, ... }:
+{
+  pkgs,
+  lib,
+  spicetify-nix,
+  system,
+  ...
+}:
 
 let
   commonArgs = { inherit pkgs; };
@@ -12,14 +18,13 @@ let
     "gaming"
   ];
 
-  mappedModules = builtins.map
-    (name: import ./${name}.nix commonArgs)
-    modulesWithCommonArgs;
+  mappedModules = builtins.map (name: import ./${name}.nix commonArgs) modulesWithCommonArgs;
 
-in {
+in
+{
   imports = mappedModules ++ [
     (import ./spicetify.nix spicetifyArgs)
     (import ./gnome.nix gnomeArgs)
-#   ./mount-google-drive.nix
+    # ./mount-google-drive.nix
   ];
 }

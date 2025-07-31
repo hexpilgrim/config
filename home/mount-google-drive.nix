@@ -1,5 +1,9 @@
 # home/mount-google-drive.nix
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 
 {
   # Mount script for GNOME Online Accounts → Google Drive
@@ -32,14 +36,13 @@
   };
 
   # Activation hook to create necessary dirs before files are placed
-  home.activation.ensure-google-drive-dirs = config.lib.dag.entryAfter ["writeBoundary"] ''
+  home.activation.ensure-google-drive-dirs = config.lib.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p "$HOME/.cache"
     mkdir -p "$HOME/.config/autostart"
   '';
 
   # Dependency required for Google Drive mounting over GVFS
   home.packages = with pkgs; [
-    gnome.gvfs  # ensures `gio mount` can resolve Google Drive URLs
+    gnome.gvfs # ensures `gio mount` can resolve Google Drive URLs
   ];
 }
-

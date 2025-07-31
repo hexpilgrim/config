@@ -1,9 +1,13 @@
 # hardware-configuration.nix
-{ config, lib, pkgs, ... }:
+{
+  isLocal,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let
-  isLocal = builtins.getEnv "IS_LOCAL_BUILD" == "1";
-in {
+{
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/01ef0406-8f77-4614-b5e0-2e4809127d7f";
     fsType = "ext4";
@@ -13,14 +17,22 @@ in {
   fileSystems."/boot" = lib.mkIf isLocal {
     device = "/dev/disk/by-uuid/54EE-56AF";
     fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   # Only mount /mnt/Backups if local build
   fileSystems."/mnt/Backups" = lib.mkIf isLocal {
     device = "LABEL=Backups";
     fsType = "auto";
-    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
+    options = [
+      "nosuid"
+      "nodev"
+      "nofail"
+      "x-gvfs-show"
+    ];
   };
 
   # swap device only on local build
@@ -29,7 +41,12 @@ in {
   ];
 
   boot.initrd.availableKernelModules = [
-    "xhci_pci" "nvme" "usb_storage" "sd_mod" "ahci" "usbhid"
+    "xhci_pci"
+    "nvme"
+    "usb_storage"
+    "sd_mod"
+    "ahci"
+    "usbhid"
   ];
 
   boot.kernelModules = [ "kvm-amd" ];
@@ -37,9 +54,11 @@ in {
   boot.extraModulePackages = [ ];
 
   # Example for conditional networking DHCP usage
-  networking.useDHCP = lib.mkDefault isLocal;
+  networking.useDHCP = lib.mkDefault true;
 
   # Enable only if local build
   nixpkgs.hostPlatform = lib.mkIf isLocal "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkIf isLocal (lib.mkDefault config.hardware.enableRedistributableFirmware);
+  hardware.cpu.amd.updateMicrocode = lib.mkIf isLocal (
+    lib.mkDefault config.hardware.enableRedistributableFirmware
+  );
 }

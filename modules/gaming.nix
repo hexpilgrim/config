@@ -1,5 +1,8 @@
 # modules/gaming.nix
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   # Configure Steam with runtime and network options
@@ -12,9 +15,10 @@
 
     # Inject theme assets into Steam runtime to fix missing cursors/UI
     package = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        adwaita-icon-theme  # Provide Adwaita cursor/theme inside Steam's runtime
-      ];
+      extraPkgs =
+        pkgs: with pkgs; [
+          adwaita-icon-theme # Provide Adwaita cursor/theme inside Steam's runtime
+        ];
     };
   };
 

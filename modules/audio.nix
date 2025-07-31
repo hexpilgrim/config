@@ -1,5 +1,7 @@
 # modules/audio.nix
-{ ... }:
+{
+  ...
+}:
 
 {
   services.pulseaudio.enable = false;
@@ -13,8 +15,11 @@
   };
 
   systemd.user.services.mpd = {
-    after = [ "pipewire.service" "pipewire-pulse.service" "pipewire-pulse.socket" ];
+    after = [
+      "pipewire.service"
+      "pipewire-pulse.service"
+      "pipewire-pulse.socket"
+    ];
     requires = [ "pipewire-pulse.socket" ];
   };
 }
-

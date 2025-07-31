@@ -1,5 +1,10 @@
 # home/spicetify.nix
-{ pkgs, spicetify-nix, system, ... }:
+{
+  pkgs,
+  spicetify-nix,
+  system,
+  ...
+}:
 
 # Load system-specific legacy Spicetify package set
 let
@@ -14,35 +19,37 @@ in
 
   programs.spicetify = {
     enable = true;
-    
+
     enabledExtensions = with spicePkgs.extensions; [
-      	shuffle
-      	adblock
-      	hidePodcasts
+      shuffle
+      adblock
+      hidePodcasts
     ];
-    
-	enabledCustomApps = with spicePkgs.apps; [
+
+    enabledCustomApps = with spicePkgs.apps; [
       (mkCustomApp "lyricsPlus" pkgs.lyricsPlus)
       (mkCustomApp "newReleases" pkgs.newReleases)
-	];
-		
-	enabledSnippets = with spicePkgs.snippets; [
-		autoHideFriends
-		modernScrollbar
-		hideNowPlayingViewButton
-		hideFriendActivityButton
-		hideMiniPlayerButton
-	] ++ [
-		''
-			/* Hide homepage filter buttons: All, Music, Podcasts, Audiobooks */
-			[aria-label="All"],
-			[aria-label="Music"],
-			[aria-label="Podcasts"],
-			[aria-label="Audiobooks"] {
-				display: none !important;
-			}
-		''
-	];
+    ];
+
+    enabledSnippets =
+      with spicePkgs.snippets;
+      [
+        autoHideFriends
+        modernScrollbar
+        hideNowPlayingViewButton
+        hideFriendActivityButton
+        hideMiniPlayerButton
+      ]
+      ++ [
+        ''
+          /* Hide homepage filter buttons: All, Music, Podcasts, Audiobooks */
+          [aria-label="All"],
+          [aria-label="Music"],
+          [aria-label="Podcasts"],
+          [aria-label="Audiobooks"] {
+            display: none !important;
+          }
+        ''
+      ];
   };
 }
-

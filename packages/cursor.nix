@@ -1,5 +1,7 @@
 # packages/cursor.nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 # Cursor is distributed as an AppImage (Type 2 wrapped here)
 # This does not sandbox or unpack the app—just makes it executable
@@ -7,7 +9,7 @@
 pkgs.appimageTools.wrapType2 {
   pname = "cursor";
   version = "1.3.2";
-  name = "cursor";  # Used for output directory
+  name = "cursor"; # Used for output directory
 
   # Fetch AppImage from official Cursor CDN
   src = pkgs.fetchurl {
@@ -19,8 +21,7 @@ pkgs.appimageTools.wrapType2 {
   meta = with pkgs.lib; {
     description = "Cursor AI-powered code editor";
     homepage = "https://www.cursor.so/";
-    license = licenses.unfree;  # Replace with exact license if known
+    license = licenses.unfree; # Replace with exact license if known
     platforms = platforms.linux;
   };
 }
-

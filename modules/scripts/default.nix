@@ -1,5 +1,8 @@
 # modules/scripts/default.nix
-{ lib, ... }:
+{
+  lib,
+  ...
+}:
 
 {
   imports = [

@@ -1,4 +1,4 @@
 # user.nix
 {
-	username = "james";
+  username = "james";
 }

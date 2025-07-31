@@ -1,10 +1,20 @@
 # modules/users.nix
-{ user, ... }:
+{
+  user,
+  ...
+}:
 
 {
   users.users.${user.username} = {
     isNormalUser = true;
     description = user.username;
-    extraGroups = [ "networkmanager" "wheel" "audio" "video" "input" "users" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "audio"
+      "video"
+      "input"
+      "users"
+    ];
   };
 }

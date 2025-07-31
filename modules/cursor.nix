@@ -1,5 +1,8 @@
 # modules/cursor.nix
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   environment.systemPackages = [
@@ -14,4 +17,3 @@
     })
   ];
 }
-

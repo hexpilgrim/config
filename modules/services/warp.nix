@@ -1,10 +1,16 @@
 # modules/services/warp.nix
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   # Reference to module config for conditional activation
   cfg = config.services.cloudflare-warp-daemon;
-in {
+in
+{
   # Toggle to enable Cloudflare WARP daemon
   options.services.cloudflare-warp-daemon.enable = lib.mkEnableOption "Enable Cloudflare WARP daemon";
 

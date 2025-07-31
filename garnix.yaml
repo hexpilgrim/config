@@ -1,15 +1,27 @@
 servers:
-  - configuration: nixos
-    path: ./configuration.nix
+  - configuration: garnix
+    path: ./flake.nix
     deployment:
       type: on-branch
       branch: main
 
-  - configuration: nixos
-    path: ./configuration.nix
+  - configuration: garnix
+    path: ./flake.nix
     deployment:
       type: on-branch
       branch: testing
+
+#  - configuration: nixos
+#    path: ./configuration.nix
+#    deployment:
+#      type: on-branch
+#      branch: main
+
+#  - configuration: nixos
+#    path: ./configuration.nix
+#    deployment:
+#      type: on-branch
+#      branch: testing
 
 #  - configuration: macos
 #    path: ./configuration.nix
