@@ -4,7 +4,7 @@ set -euo pipefail
 
 # CONFIGURATION
 REPO_URL="https://github.com/hexpilgrim/nixcfgs.git"   # GitHub repo URL
-REPO_BRANCH="testing"                                  # Specific branch to clone
+REPO_BRANCH="main"                                  # Specific branch to clone
 HOSTNAME="nixos"                                       # Flake hostname
 
 # Detect current user
