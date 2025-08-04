@@ -21,12 +21,22 @@ in
       ;
   };
 
+  nixpkgs.overlays = [
+    (import ./overlays/spotify-patch.nix)
+    (import ./overlays/catppuccin.nix)
+  ];
+
   # Enable advanced Nix tooling
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
+
+  # Allow unfree (proprietary) packages globally
   nixpkgs.config.allowUnfree = true;
+
+  # Enable vertualisation support
+  virtualisation.docker.enable = true;
 
   # Enable X11 and GNOME desktop environment
   services.xserver = {
@@ -45,7 +55,7 @@ in
   '';
 
   # Declarative activation of Cloudflare WARP daemon
-  # services.cloudflare-warp-daemon.enable = true;
+  #services.cloudflare-warp-daemon.enable = true;
 
   # Set system version for compatibility
   system.stateVersion = "25.05";

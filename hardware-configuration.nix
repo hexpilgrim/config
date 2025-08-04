@@ -26,7 +26,7 @@
   # Only mount /mnt/Backups if local build
   fileSystems."/mnt/Backups" = lib.mkIf isLocal {
     device = "LABEL=Backups";
-    fsType = "auto";
+    fsType = "btrfs";
     options = [
       "nosuid"
       "nodev"

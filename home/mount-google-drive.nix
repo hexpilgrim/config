@@ -43,6 +43,6 @@
 
   # Dependency required for Google Drive mounting over GVFS
   home.packages = with pkgs; [
-    gnome.gvfs # ensures `gio mount` can resolve Google Drive URLs
+    gnome.gvfs # ensures 'gio mount' can resolve Google Drive URLs
   ];
 }

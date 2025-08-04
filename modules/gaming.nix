@@ -17,7 +17,8 @@
     package = pkgs.steam.override {
       extraPkgs =
         pkgs: with pkgs; [
-          adwaita-icon-theme # Provide Adwaita cursor/theme inside Steam's runtime
+          adwaita-icon-theme
+          adwsteamgtk 
         ];
     };
   };

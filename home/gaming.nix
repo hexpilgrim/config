@@ -16,5 +16,6 @@
     gamescope
     protonplus
     mangojuice
+    heroic
   ];
 }

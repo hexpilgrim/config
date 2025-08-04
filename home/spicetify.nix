@@ -19,6 +19,10 @@ in
 
   programs.spicetify = {
     enable = true;
+    alwaysEnableDevTools = true;
+
+    theme = spicePkgs.themes.catppuccin;
+    colorScheme = "mocha";
 
     enabledExtensions = with spicePkgs.extensions; [
       shuffle
@@ -39,6 +43,8 @@ in
         hideNowPlayingViewButton
         hideFriendActivityButton
         hideMiniPlayerButton
+        removeGradient
+        removeDuplicatedFullscreenButton
       ]
       ++ [
         ''

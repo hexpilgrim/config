@@ -3,5 +3,7 @@
   overlayPackageNames = [
     "lyricsPlus"
     "newReleases"
+    "spotify-patch"
+    "catppuccin"
   ];
 }

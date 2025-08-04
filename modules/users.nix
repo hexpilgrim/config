@@ -15,6 +15,7 @@
       "video"
       "input"
       "users"
+      "docker"
     ];
   };
 }

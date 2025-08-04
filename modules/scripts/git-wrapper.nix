@@ -8,6 +8,7 @@
   # Override 'git' behavior with custom shell logic:
   # • Pull from all Git repos in current directory (non-recursive)
   # • List unique remote URLs from each Git repo
+  # • If no arguments are given, use the default git command
   programs.bash.shellInit = lib.strings.concatStringsSep "\n" [
     ''
       git() {

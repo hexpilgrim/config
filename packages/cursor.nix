@@ -21,7 +21,8 @@ pkgs.appimageTools.wrapType2 {
   meta = with pkgs.lib; {
     description = "Cursor AI-powered code editor";
     homepage = "https://www.cursor.so/";
-    license = licenses.unfree; # Replace with exact license if known
+    license = licenses.unfree;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ hexpilgrim ];
   };
 }

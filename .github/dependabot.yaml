@@ -1,3 +1,4 @@
+# .github/dependabot.yaml
 version: 2
 updates:
   - package-ecosystem: github-actions
