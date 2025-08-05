@@ -19,15 +19,31 @@
 
     # umu-launcher: a Nix flake for managing the umu launcher, a tool for launching applications
     umu = { url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix"; inputs.nixpkgs.follows = "nixpkgs"; };
- 
+
     # nix-gaming: a Nix flake for managing gaming-related packages and configurations
     nix-gaming = { url = "github:fufexan/nix-gaming"; inputs.nixpkgs.follows = "nixpkgs"; };
+
+    # disko; declarative disk partitioning and formatting using nix
+    disko = { url = "github:nix-community/disko"; inputs.nixpkgs.follows = "nixpkgs"; };
+
+    # flake-parts: simplify Nix Flakes with the module system
+    flake-parts = { url = "github:hercules-ci/flake-parts"; };
+
+    # flake-utils: pure Nix flake utility functions
+    flake-utils = { url = "github:numtide/flake-utils"; };
+
+    # lanzaboote: Secure Boot for NixOS
+    #lanzaboote = { url = "github:nix-community/lanzaboote"; };
+
+    # nix-index: quickly locate nix packages with specific files
+    nix-index = { url = "github:nix-community/nix-index"; inputs.nixpkgs.follows = "nixpkgs"; };
+
+    # nixos-hardware: a collection of NixOS modules covering hardware quirks
+    nixos-hardware = { url = "github:NixOS/nixos-hardware"; };
+
+    # catppiccin: a soothing pastel theme for Nix
+    catppuccin = { url = "github:catppuccin/nix"; inputs.nixpkgs.follows = "nixpkgs"; };
   };
 
-  outputs =
-    {
-      self,
-      ...
-    }@inputs:
-    import ./builders.nix inputs self;
+  outputs = { self, ... }@inputs: import ./outputs.nix inputs self;
 }
