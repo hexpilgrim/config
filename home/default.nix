@@ -13,7 +13,7 @@ let
   gnomeArgs = { inherit pkgs lib; };
 
   modulesWithCommonArgs = [
-    "packages"
+    "programs"
     "firefox"
     "gaming"
   ];

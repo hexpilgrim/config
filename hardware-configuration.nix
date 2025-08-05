@@ -1,6 +1,5 @@
 # hardware-configuration.nix
 {
-  isLocal,
   config,
   lib,
   pkgs,
@@ -13,8 +12,8 @@
     fsType = "ext4";
   };
 
-  # Only mount /boot if local build
-  fileSystems."/boot" = lib.mkIf isLocal {
+  # Mount /boot
+  fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/54EE-56AF";
     fsType = "vfat";
     options = [
@@ -23,8 +22,8 @@
     ];
   };
 
-  # Only mount /mnt/Backups if local build
-  fileSystems."/mnt/Backups" = lib.mkIf isLocal {
+  # Mount /mnt/Backups
+  fileSystems."/mnt/Backups" = {
     device = "LABEL=Backups";
     fsType = "btrfs";
     options = [
@@ -35,8 +34,8 @@
     ];
   };
 
-  # swap device only on local build
-  swapDevices = lib.mkIf isLocal [
+  # swap device
+  swapDevices = [
     { device = "/dev/disk/by-uuid/b779e0f7-6e56-4be1-a808-d779cc0b5b09"; }
   ];
 
@@ -56,9 +55,6 @@
   # Example for conditional networking DHCP usage
   networking.useDHCP = lib.mkDefault true;
 
-  # Enable only if local build
-  nixpkgs.hostPlatform = lib.mkIf isLocal "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkIf isLocal (
-    lib.mkDefault config.hardware.enableRedistributableFirmware
-  );
+  nixpkgs.hostPlatform = "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = (lib.mkDefault config.hardware.enableRedistributableFirmware);
 }

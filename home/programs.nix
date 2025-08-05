@@ -1,4 +1,4 @@
-# home/packages.nix
+# home/programs.nix
 {
   pkgs,
   ...

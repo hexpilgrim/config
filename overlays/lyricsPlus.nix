@@ -9,7 +9,7 @@ system: self: super: {
       owner = "spicetify";
       repo = "cli";
       rev = "main";
-      sha256 = "JQePmLk1uYLdj1j2kIPzvEPQbPNpvav/tpR1v+YF4Mc=";
+      sha256 = "9rX3jifEmGL1ewiTu3DoUYI/u8Osl1wVSo+9yWH+J8I=";
     };
 
     # Install full contents of lyrics-plus app
