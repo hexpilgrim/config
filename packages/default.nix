@@ -1,8 +1,5 @@
 # packages/default.nix
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   cursor = pkgs.callPackage ./cursor.nix { };

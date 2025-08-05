@@ -1,21 +1,5 @@
 # outputs.nix
-{
-  nixpkgs,
-  home-manager,
-  chaotic,
-  spicetify-nix,
-  nur,
-  umu,
-  nix-gaming,
-  disko,
-  flake-parts,
-  flake-utils,
-  nix-index,
-  nixos-hardware,
-  catppuccin,
-  ...
-}@inputs:
-self:
+{ inputs, self, ... }:
 
 let
   system = "x86_64-linux";
@@ -24,40 +8,36 @@ let
   flakeRoot = self;
 
   overlays = import ./lib/overlay-loader.nix {
-    inherit system defaults;
-    flakeRoot = self;
+    inherit system defaults flakeRoot;
   };
 
-  pkgs = import nixpkgs {
-    inherit system;
-    overlays = overlays;
-    config.allowUnfree = true;
+  pkgs = import ./lib/pkgs.nix {
+    nixpkgs = inputs.nixpkgs;
+    inherit system overlays;
   };
 
   customPkgs = import ./packages { inherit pkgs; };
 
   baseModules = [
     ./modules/boot.nix
-    ./configuration.nix
+    (import ./configuration.nix)
     ./hardware-configuration.nix
   ];
 
-  chaoticModules = with chaotic.nixosModules; [
+  chaoticModules = with inputs.chaotic.nixosModules; [
     nyx-cache
     nyx-overlay
     nyx-registry
   ];
 
-  builders = import ./builders.nix (
+  constructors = import ./constructors.nix (
     inputs
     // {
-      flakeRoot = self;
-      pkgs = pkgs;
-      system = system;
+      inherit flakeRoot pkgs system;
     }
   );
 
-  mkConfig = builders.mkSystem {
+  mkConfig = constructors.mkSystem {
     inherit
       system
       user
@@ -67,25 +47,34 @@ let
       ;
     extraModules = chaoticModules;
   };
-in
-{
-  nixosConfigurations.nixos = mkConfig;
 
-  packages.${system} = builtins.listToAttrs (
-    (map (name: {
+  overlayPkgsAttrs = builtins.listToAttrs (
+    map (name: {
       name = name;
       value = pkgs.${name};
-    }) defaults.overlayPackageNames)
-    ++ (map (name: {
-      name = name;
-      value = customPkgs.${name};
-    }) (builtins.attrNames customPkgs))
+    }) defaults.overlayPackageNames
   );
 
-  overlays.default = pkgs.lib.composeManyExtensions overlays;
+  customPkgsAttrs = builtins.listToAttrs (
+    map (name: {
+      name = name;
+      value = customPkgs.${name};
+    }) (builtins.attrNames customPkgs)
+  );
 
-  nixosModules.default = ./configuration.nix;
-  homeManagerModules.default = ./home.nix;
+in
+{
+  flake = {
+    nixosConfigurations.nixos = mkConfig;
 
-  devShells.${system} = import ./dev/default.nix { inherit pkgs; };
+    packages.${system} = overlayPkgsAttrs // customPkgsAttrs;
+
+    overlays.default = pkgs.lib.composeManyExtensions overlays;
+    nixosModules.default = ./configuration.nix;
+    homeManagerModules.default = ./home.nix;
+
+    devShells.${system} = import ./dev/default.nix { inherit pkgs; };
+
+    lib.mkSystem = constructors.mkSystem;
+  };
 }

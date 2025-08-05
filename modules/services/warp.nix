@@ -7,14 +7,11 @@
 }:
 
 let
-  # Reference to module config for conditional activation
   cfg = config.services.cloudflare-warp-daemon;
 in
 {
-  # Toggle to enable Cloudflare WARP daemon
   options.services.cloudflare-warp-daemon.enable = lib.mkEnableOption "Enable Cloudflare WARP daemon";
 
-  # Runtime configuration if WARP is enabled
   config = lib.mkIf cfg.enable {
     systemd.services.warp-svc = {
       description = "Cloudflare WARP Daemon";
@@ -26,12 +23,9 @@ in
       };
     };
 
-    # Suppress unwanted user-level tray icon
-    systemd.user.services.warp-taskbar = {
-      enable = false;
-    };
+    # Disable user-level tray icon service (optional)
+    systemd.user.services.warp-taskbar.enable = false;
 
-    # Ensure warp binary is available in system environment
     environment.systemPackages = [ pkgs.cloudflare-warp ];
   };
 }

@@ -9,7 +9,6 @@
 }:
 
 {
-  # Import full user-specific Home Manager config from ./home/*
   imports = [
     (import ./home {
       inherit
@@ -21,27 +20,22 @@
     })
   ];
 
-  # Define the user's home directory and username
-  home = {
-    username = user.username;
-    homeDirectory = "/home/${user.username}";
+  home.username = user.username;
+  home.homeDirectory = "/home/${user.username}";
 
-    # Load Home Manager shell hooks on login (avoids hardcoded sourcing in .bashrc)
-    file.".bashrc".text = ''
+  home.file = {
+    ".bashrc".text = ''
       [ -f "$HOME/.local/state/home-manager/environment" ] && source "$HOME/.local/state/home-manager/environment"
     '';
-
-    # Lock Home Manager compatibility version
-    stateVersion = "25.05";
   };
 
-  # Bootstrap Home Manager functionality
+  home.stateVersion = "25.05";
+
   programs = {
     home-manager.enable = true;
     bash.enable = true;
   };
 
-  # Enable XDG user directories
   xdg.userDirs = {
     enable = true;
     music = "/mnt/Backups/Music";

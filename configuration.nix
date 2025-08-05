@@ -1,6 +1,5 @@
 # configuration.nix
 let
-  # Import user metadata to pass into modules
   user = import ./user.nix;
 in
 {
@@ -11,7 +10,6 @@ in
 }:
 
 {
-  # Load modular system config and hardware details
   imports = import ./modules {
     inherit
       pkgs
@@ -26,7 +24,6 @@ in
     (import ./overlays/catppuccin.nix)
   ];
 
-  # Enable advanced Nix tooling
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -34,13 +31,10 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Allow unfree (proprietary) packages globally
   nixpkgs.config.allowUnfree = true;
 
-  # Enable vertualisation support
   virtualisation.docker.enable = true;
 
-  # Enable X11 and GNOME desktop environment
   services.xserver = {
     enable = true;
     xkb.layout = "gb";
@@ -51,14 +45,12 @@ in
 
   services.printing.enable = true;
 
-  # Reduces wait time to 15 seconds
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=15s
   '';
 
-  # Declarative activation of Cloudflare WARP daemon
+  # Uncomment if you want Cloudflare Warp
   #services.cloudflare-warp-daemon.enable = true;
 
-  # Set system version for compatibility
   system.stateVersion = "25.05";
 }

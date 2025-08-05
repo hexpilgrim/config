@@ -1,14 +1,8 @@
 # modules/scripts/unzip.nix
-{
-  lib,
-  ...
-}:
+{ lib, ... }:
 
 {
-  # Override 'unzip' behavior with custom shell logic:
-  # • Unzip all .zip files in the current directory into their own folders
-  # • If no arguments are given, unzip all .zip files
-  # • If an argument is given, use the default unzip command
+  # Override 'unzip' command with bulk unzip functionality
   programs.bash.shellInit = lib.strings.concatStringsSep "\n" [
     ''
       unzip() {

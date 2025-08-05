@@ -1,7 +1,5 @@
 # modules/locale.nix
-{
-  ...
-}:
+{ ... }:
 
 {
   time.timeZone = "Europe/London";

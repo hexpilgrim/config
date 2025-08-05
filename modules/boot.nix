@@ -8,7 +8,7 @@
 
 {
   boot = {
-    #kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest; # uncomment to use latest kernel
 
     loader = {
       systemd-boot = {

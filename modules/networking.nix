@@ -1,8 +1,5 @@
 # modules/networking.nix
-{
-  lib,
-  ...
-}:
+{ lib, ... }:
 
 {
   networking = {

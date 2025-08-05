@@ -1,13 +1,9 @@
 # home/gaming.nix
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
-  # Force RADV Vulkan driver for AMD GPUs
   home.sessionVariables = {
-    AMD_VULKAN_ICD = "RADV";
+    AMD_VULKAN_ICD = "RADV"; # Force RADV Vulkan driver for AMD GPUs
   };
 
   home.packages = with pkgs; [

@@ -1,4 +1,4 @@
-# builders.nix
+# constructors.nix
 {
   nixpkgs,
   pkgs,
@@ -29,6 +29,7 @@ let
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
+
             home-manager.users.${user.username} = import (flakeRoot + "/home.nix") {
               inherit
                 pkgs

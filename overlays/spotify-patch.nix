@@ -18,7 +18,6 @@ final: prev: {
     installPhase = ''
       echo "Reorganizing install paths..."
 
-      # Ensure Spotify lands at $out/share/spotify/spotify
       mkdir -p $out/share/spotify
       cp -r usr/share/spotify/* $out/share/spotify/
 

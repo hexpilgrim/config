@@ -1,8 +1,5 @@
 # modules/users.nix
-{
-  user,
-  ...
-}:
+{ user, ... }:
 
 {
   users.users.${user.username} = {

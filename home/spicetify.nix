@@ -6,15 +6,14 @@
   ...
 }:
 
-# Load system-specific legacy Spicetify package set
 let
   spicePkgs = spicetify-nix.legacyPackages.${system};
 
-  # Helper to wrap app name and src for CustomApps
-  mkCustomApp = name: src: { inherit name src; };
+  mkCustomApp = name: src: {
+    inherit name src;
+  };
 in
 {
-  # Import Spicetify module for Home Manager integration
   imports = [ spicetify-nix.homeManagerModules.spicetify ];
 
   programs.spicetify = {

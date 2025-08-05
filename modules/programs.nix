@@ -1,8 +1,5 @@
 # modules/programs.nix
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   services.flatpak.enable = true;
@@ -25,9 +22,7 @@
     act
   ];
 
-  environment.gnome.excludePackages = with pkgs; [
-    gnome-console
-  ];
+  environment.gnome.excludePackages = [ pkgs.gnome-console ];
 
   programs.gnupg.agent = {
     enable = true;
@@ -42,21 +37,17 @@
 
   security.pam.services.login.enableGnomeKeyring = true;
 
-  # Systemd service to ensure Flathub repository is configured on boot
   systemd.services.flatpak-repo = {
-    wantedBy = [ "multi-user.target" ]; # Start once network is ready during boot
+    wantedBy = [ "multi-user.target" ];
     after = [ "network-online.target" ];
     requires = [ "network-online.target" ];
 
-    # Ensure 'flatpak' is in $PATH
     path = [ pkgs.flatpak ];
 
-    # Idempotently add Flathub remote
     script = ''
       flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     '';
 
-    # Run once, exit, and keep the service marked active post-execution
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;

@@ -1,23 +1,21 @@
 # modules/maintenance.nix
-{
-  ...
-}:
+{ ... }:
 
 {
-  # Automatically upgrade the system using NixOS channel updates
+  # Automatic system upgrade (no reboot)
   system.autoUpgrade = {
     enable = true;
     allowReboot = false;
   };
 
-  # Enable automatic garbage collection to keep the system clean
+  # Automatic garbage collection weekly, removing items older than 7 days
   nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
 
-  # Backup the current /etc/nixos config & Log restults
+  # Backup current /etc/nixos config and cleanup old backups
   system.activationScripts.postActivation = {
     text = ''
       log="/var/log/nixos-maintenance.log"
@@ -33,10 +31,9 @@
       echo "[Backup] Done: $backup_dir" | tee -a "$log"
 
       max_backups=10
-
       echo "[Cleanup] Retaining only the latest $max_backups backups..." | tee -a "$log"
 
-      # List sorted backup folders (most recent first), skip the newest N, and delete older ones
+      # Delete older backups, keep the newest $max_backups
       ls -dt "$backup_root"/* 2>/dev/null | tail -n +$((max_backups + 1)) | while read -r old; do
         rm -rf "$old"
         echo "[Cleanup] Removed: $old" | tee -a "$log"

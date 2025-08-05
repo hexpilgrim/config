@@ -1,5 +1,11 @@
 # modules/mount-google-drive.nix
-{ config, pkgs, lib, user, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  user,
+  ...
+}:
 
 let
   username = user.username;
@@ -28,16 +34,14 @@ let
   '';
 in
 {
-  environment.systemPackages = with pkgs; [ gnome.gvfs ];
+  environment.systemPackages = [ pkgs.gnome.gvfs ];
 
-  # Create required directories at boot with correct ownership
   systemd.tmpfiles.rules = [
     "d ${home}/.local/bin 0755 ${username} users -"
     "d ${home}/.cache 0755 ${username} users -"
     "d ${home}/.config/autostart 0755 ${username} users -"
   ];
 
-  # Deploy the mount script and autostart entry using activation script
   system.activationScripts.mountGoogleDrive = lib.stringAfter [ "users" ] ''
     install -m 755 -o ${username} -g users -D ${pkgs.writeText "mount-google-drive.sh" mountScript} ${mountScriptPath}
     install -m 644 -o ${username} -g users -D ${pkgs.writeText "google-drive.desktop" desktopEntry} ${desktopEntryPath}

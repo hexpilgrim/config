@@ -1,9 +1,6 @@
 # dev/nodejs.nix
-{
-  pkgs,
-}:
+{ pkgs }:
 
-# This Nix expression defines a development shell for Node.js
 pkgs.mkShell {
   buildInputs = [
     pkgs.nodejs_24
@@ -12,6 +9,6 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    echo "Node.js (24) dev shell activated."
+    echo "Node.js 24 development shell activated."
   '';
 }

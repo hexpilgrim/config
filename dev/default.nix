@@ -1,8 +1,6 @@
 # dev/default.nix
-{
-  pkgs,
-}:
+{ pkgs }:
 
 {
-  nodejs = import ./nodejs.nix { pkgs = pkgs; };
+  nodejs = import ./nodejs.nix { inherit pkgs; };
 }
