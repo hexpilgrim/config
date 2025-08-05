@@ -9,8 +9,8 @@ let
   themeSrc = pkgs.fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "firefox-gnome-theme";
-    rev = "master";
-    sha256 = "KJjs4BdQ03X4jcc/aAcjO0PwHaYUYBAb6UIIL5fFslY=";
+    rev = "6f173d0873dd33c5653dee89a831af3e49db3e36";
+    sha256 = "sha256-9veVYpPCwKNjIK5gOigl5nEUN6tmrSHXUv4bVZkRuOE=";
   };
 
 in

@@ -1,0 +1,81 @@
+# .github/workflows/nixos-config-check.yaml
+name: nixos-config-check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions: {}
+
+env:
+  flake: github:${{ github.repository }}/${{ github.sha }}
+  nix-conf: |-
+    accept-flake-config = true
+    always-allow-substitutes = true
+    builders-use-substitutes = true
+    max-jobs = auto
+    nixos-host: nixos
+
+jobs:
+  flake-check:
+    name: flake check (x86_64-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@v19
+        with:
+          extra-conf: ${{ env.nix-conf }}
+      - uses: cachix/cachix-action@v16
+        with:
+          name: hexpilgrim-cache
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          extraPullNames: nix-community
+      - name: nix flake check
+        run: nix flake check '${{ env.flake }}' --impure --option allow-import-from-derivation true
+
+  flake-show:
+    name: flake show (x86_64-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@v19
+        with:
+          extra-conf: ${{ env.nix-conf }}
+      - uses: cachix/cachix-action@v16
+        with:
+          name: hexpilgrim-cache
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          extraPullNames: nix-community
+      - name: nix flake show
+        run: nix flake show '${{ env.flake }}' --impure --option allow-import-from-derivation true
+
+  build:
+    name: build nixos system (x86_64-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: wimpysworld/nothing-but-nix@main
+        with:
+          hatchet-protocol: "holster"
+      - uses: DeterminateSystems/nix-installer-action@v19
+        with:
+          extra-conf: ${{ env.nix-conf }}
+      - uses: cachix/cachix-action@v16
+        with:
+          name: hexpilgrim-cache
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          extraPullNames: nix-community
+      - name: build system config
+        run: nix build '${{ env.flake }}#nixosConfigurations.${{ env.nixos-host }}.config.system.build.toplevel'
+
+  check:
+    name: aggregate check
+    runs-on: ubuntu-24.04
+    needs:
+      - flake-check
+      - flake-show
+      - build
+    if: always()
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}

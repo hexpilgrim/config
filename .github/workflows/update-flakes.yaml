@@ -1,4 +1,4 @@
-# .github/workflows/flake-update.yaml
+# .github/workflows/update-flakes.yaml
 name: update-flakes
 
 on:
