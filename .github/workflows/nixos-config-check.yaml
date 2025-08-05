@@ -1,4 +1,6 @@
 # .github/workflows/nixos-config-check.yaml
+name: ci
+
 on:
   push:
     branches:
