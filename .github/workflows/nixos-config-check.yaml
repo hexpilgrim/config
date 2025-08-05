@@ -3,8 +3,7 @@ name: ci
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
 
 permissions: {}
@@ -19,61 +18,96 @@ env:
     max-jobs = auto
 
 jobs:
-  flake-check:
-    name: flake check (x86_64-linux)
+  prepare-matrix:
+    name: deployment cachix
     runs-on: ubuntu-24.04
+    outputs:
+      input-matrix: ${{ steps.set-matrix.outputs.input-matrix }}
     steps:
-      - uses: DeterminateSystems/nix-installer-action@v19
-        with:
-          extra-conf: ${{ env.nix-conf }}
-      - uses: cachix/cachix-action@v16
-        with:
-          name: hexpilgrim-cache
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-          extraPullNames: nix-community
-      - name: nix flake check
-        run: nix flake check '${{ env.flake }}' --impure --option allow-import-from-derivation true
+      - uses: actions/checkout@v3
 
-  flake-show:
-    name: flake show (x86_64-linux)
+      - uses: DeterminateSystems/nix-installer-action@v19
+
+      - name: Parse .nodes.root.inputs keys and include system
+        id: set-matrix
+        run: |
+          SYSTEM=$(nix eval --impure --expr 'builtins.currentSystem' --raw)
+          echo "System platform detected: $SYSTEM"
+          matrix=$(jq -c --arg system "$SYSTEM" '.nodes.root.inputs | keys | map({input: ., system: $system})' flake.lock)
+          echo "Matrix: $matrix"
+          echo "input-matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  flake-lock-check:
+    name: package ${{ matrix.input.input }} [${{ matrix.input.system }}]
+    runs-on: ubuntu-24.04
+    needs: prepare-matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        input: ${{ fromJson(needs.prepare-matrix.outputs.input-matrix) }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Debug matrix input
+        run: echo '${{ toJson(matrix.input) }}'
+
+      - name: Validate input exists in .nodes.root.inputs
+        run: |
+          input_name="${{ matrix.input.input }}"
+          if jq -e --arg input "$input_name" '.nodes.root.inputs | has($input)' flake.lock > /dev/null; then
+            echo "'$input_name' found in flake.lock"
+          else
+            echo "'$input_name' not found in flake.lock"
+            exit 1
+          fi
+
+  flake-check:
+    name: Evaluate flake.nix
     runs-on: ubuntu-24.04
     steps:
       - uses: DeterminateSystems/nix-installer-action@v19
         with:
           extra-conf: ${{ env.nix-conf }}
+
       - uses: cachix/cachix-action@v16
         with:
           name: hexpilgrim-cache
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
           extraPullNames: nix-community
-      - name: nix flake show
-        run: nix flake show '${{ env.flake }}' --impure --option allow-import-from-derivation true
+
+      - name: Evaluate flake.nix
+        run: |
+          nix flake check '${{ env.flake }}' --impure --option allow-import-from-derivation true && \
+          nix flake show '${{ env.flake }}' --impure --option allow-import-from-derivation true
 
   build:
-    name: build nixos system (x86_64-linux)
+    name: nixosConfig nixos
     runs-on: ubuntu-24.04
     steps:
       - uses: wimpysworld/nothing-but-nix@main
         with:
           hatchet-protocol: "holster"
+
       - uses: DeterminateSystems/nix-installer-action@v19
         with:
           extra-conf: ${{ env.nix-conf }}
+
       - uses: cachix/cachix-action@v16
         with:
           name: hexpilgrim-cache
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
           extraPullNames: nix-community
-      - name: build system config
+
+      - name: Build system configuration
         run: nix build '${{ env.flake }}#nixosConfigurations.${{ env.nixos-host }}.config.system.build.toplevel'
 
   check:
-    name: aggregate check
+    name: All Cachix checks
     runs-on: ubuntu-24.04
     needs:
       - flake-check
-      - flake-show
       - build
+      - flake-lock-check
     if: always()
     steps:
       - uses: re-actors/alls-green@release/v1
