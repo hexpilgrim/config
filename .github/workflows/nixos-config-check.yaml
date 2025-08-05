@@ -11,12 +11,12 @@ permissions: {}
 
 env:
   flake: github:${{ github.repository }}/${{ github.sha }}
+  nixos-host: nixos
   nix-conf: |-
     accept-flake-config = true
     always-allow-substitutes = true
     builders-use-substitutes = true
     max-jobs = auto
-    nixos-host: nixos
 
 jobs:
   flake-check:
