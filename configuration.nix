@@ -32,6 +32,8 @@ in
     "flakes"
   ];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Allow unfree (proprietary) packages globally
   nixpkgs.config.allowUnfree = true;
 

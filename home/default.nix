@@ -1,30 +1,28 @@
 # home/default.nix
-{
-  pkgs,
-  lib,
-  spicetify-nix,
-  system,
-  ...
-}:
+args@{ ... }:
 
 let
-  commonArgs = { inherit pkgs; };
-  spicetifyArgs = { inherit pkgs spicetify-nix system; };
-  gnomeArgs = { inherit pkgs lib; };
+  # Extract lib early so it's available below
+  lib = args.lib;
 
-  modulesWithCommonArgs = [
-    "programs"
-    "firefox"
-    "gaming"
-  ];
+  allFiles = builtins.attrNames (builtins.readDir ./.);
 
-  mappedModules = builtins.map (name: import ./${name}.nix commonArgs) modulesWithCommonArgs;
+  nixFiles = builtins.filter (
+    name: lib.hasSuffix ".nix" name && name != "default.nix" && !(lib.hasSuffix ".userChrome.nix" name)
+  ) allFiles;
+
+  importWithAutoArgs =
+    name:
+    let
+      path = ./${name};
+      argsNeeded = builtins.functionArgs (import path);
+      argsToPass = builtins.intersectAttrs argsNeeded args;
+    in
+    import path argsToPass;
+
+  modules = builtins.map importWithAutoArgs nixFiles;
 
 in
 {
-  imports = mappedModules ++ [
-    (import ./spicetify.nix spicetifyArgs)
-    (import ./gnome.nix gnomeArgs)
-    #./mount-google-drive.nix
-  ];
+  imports = modules;
 }
