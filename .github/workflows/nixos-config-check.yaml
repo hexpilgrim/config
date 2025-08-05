@@ -67,6 +67,34 @@ jobs:
       - name: build system config
         run: nix build '${{ env.flake }}#nixosConfigurations.${{ env.nixos-host }}.config.system.build.toplevel'
 
+  input-check:
+    name: validate flake input ${{ matrix.input }} [x86_64-linux]
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        input:
+          - nixpkgs
+          - home-manager
+          - nur
+          - chaotic
+          - spicetify-nix
+          - umu
+          - nix-gaming
+          - disko
+          - flake-parts
+          - flake-utils
+          - nix-index
+          - nixos-hardware
+          - catppuccin
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@v19
+        with:
+          extra-conf: ${{ env.nix-conf }}
+      - name: verify input '${{ matrix.input }}' exists in flake
+        run: |
+          nix flake show --json | jq -e '.inputs["${{ matrix.input }}"]' > /dev/null
+
   check:
     name: aggregate check
     runs-on: ubuntu-24.04
@@ -74,6 +102,7 @@ jobs:
       - flake-check
       - flake-show
       - build
+      - input-check
     if: always()
     steps:
       - uses: re-actors/alls-green@release/v1
