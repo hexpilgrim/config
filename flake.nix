@@ -4,6 +4,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -27,14 +29,14 @@
       _module.args = {
         inputFollows = {
           home-manager = "nixpkgs";
-          nur = "nixpkgs";
-          chaotic = "nixpkgs";
-          spicetify-nix = "nixpkgs";
-          umu = "nixpkgs";
-          nix-gaming = "nixpkgs";
-          disko = "nixpkgs";
-          nix-index = "nixpkgs";
-          catppuccin = "nixpkgs";
+          nur = "nixpkgs-unstable";
+          chaotic = "nixpkgs-unstable";
+          spicetify-nix = "nixpkgs-unstable";
+          umu = "nixpkgs-unstable";
+          nix-gaming = "nixpkgs-unstable";
+          disko = "nixpkgs-unstable";
+          nix-index = "nixpkgs-unstable";
+          catppuccin = "nixpkgs-unstable";
         };
       };
 

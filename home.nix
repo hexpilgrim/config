@@ -20,24 +20,21 @@
     })
   ];
 
-  home.username = user.username;
-  home.homeDirectory = "/home/${user.username}";
+  home = {
+    stateVersion = "25.05";
 
-  home.file = {
-    ".bashrc".text = ''
-      [ -f "$HOME/.local/state/home-manager/environment" ] && source "$HOME/.local/state/home-manager/environment"
-    '';
+    username = user.username;
+    homeDirectory = "/home/${user.username}";
+
+    file = {
+      ".bashrc".text = ''
+        [ -f "$HOME/.local/state/home-manager/environment" ] && source "$HOME/.local/state/home-manager/environment"
+      '';
+    };
   };
-
-  home.stateVersion = "25.05";
 
   programs = {
     home-manager.enable = true;
     bash.enable = true;
-  };
-
-  xdg.userDirs = {
-    enable = true;
-    music = "/mnt/Backups/Music";
   };
 }

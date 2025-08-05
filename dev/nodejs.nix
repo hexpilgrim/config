@@ -1,14 +1,15 @@
 # dev/nodejs.nix
-{ pkgs }:
+{ pkgs, nodeVersion ? pkgs.nodejs_24 }:
 
 pkgs.mkShell {
   buildInputs = [
-    pkgs.nodejs_24
+    nodeVersion
     pkgs.nodePackages.npm
     pkgs.nodePackages.yarn
   ];
 
   shellHook = ''
-    echo "Node.js 24 development shell activated."
+    echo "Node.js (${nodeVersion.version or "default"}) dev shell activated."
+    export NODE_ENV=development
   '';
 }

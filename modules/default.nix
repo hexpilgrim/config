@@ -17,7 +17,7 @@ let
       argsNeeded = builtins.functionArgs (import path);
       argsToPass = builtins.intersectAttrs argsNeeded args;
     in
-    builtins.trace "Importing module: ${path}" (import path argsToPass)
+    import path argsToPass
   ) nixFiles;
 
 in
