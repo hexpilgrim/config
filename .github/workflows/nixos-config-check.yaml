@@ -93,7 +93,7 @@ jobs:
           extra-conf: ${{ env.nix-conf }}
       - name: verify input '${{ matrix.input }}' exists in flake
         run: |
-          nix flake show --json | jq -e '.inputs["${{ matrix.input }}"]' > /dev/null
+          nix flake show --json '${{ env.flake }}' | jq -e '.inputs["${{ matrix.input }}"]' > /dev/null
 
   check:
     name: aggregate check
