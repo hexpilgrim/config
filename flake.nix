@@ -18,6 +18,8 @@
     disko.url = "github:nix-community/disko";
     nix-index.url = "github:nix-community/nix-index";
     catppuccin.url = "github:catppuccin/nix";
+    lanzaboot.url = "github:nix-community/lanzaboot/v0.4.2";
+    infra.url = "github:nix-community/infra";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
   };
@@ -37,6 +39,8 @@
           disko = "nixpkgs-unstable";
           nix-index = "nixpkgs-unstable";
           catppuccin = "nixpkgs-unstable";
+          lanzaboot = "nixpkgs";
+          infra = "nixpkgs-unstable";
         };
       };
 
