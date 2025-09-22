@@ -513,11 +513,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1758486922,
-        "narHash": "sha256-kxm26m3f3jjGEdd+ipXZDq4rMCKRKJ5i48F6gmnNqgI=",
+        "lastModified": 1758505304,
+        "narHash": "sha256-+GGY/8u8+DlJTh5CP2xY6pu+ehdHtRAmu3CwQopMIbg=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "a147fdc34a8a19741fe9979be2d81ff5f3589cc8",
+        "rev": "c2d0199cb6a9ae76517c73307520155738dffcde",
         "type": "github"
       },
       "original": {
