@@ -24,7 +24,7 @@ jobs:
     outputs:
       input-matrix: ${{ steps.set-matrix.outputs.input-matrix }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: DeterminateSystems/nix-installer-action@v20
 
@@ -46,7 +46,7 @@ jobs:
       matrix:
         input: ${{ fromJson(needs.prepare-matrix.outputs.input-matrix) }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Debug matrix input
         run: echo '${{ toJson(matrix.input) }}'
