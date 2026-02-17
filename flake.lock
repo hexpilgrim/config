@@ -620,11 +620,11 @@
       },
       "locked": {
         "dir": "packaging/nix",
-        "lastModified": 1765757739,
-        "narHash": "sha256-mFur6BsNkJm4tH0O4lkOaCVtZnEeNlw9xDkZUSnzHIU=",
+        "lastModified": 1771308337,
+        "narHash": "sha256-Z+DkPGtAOVf5rPdz5U8An3P35kDUyyY2PR6YQLElT50=",
         "owner": "Open-Wine-Components",
         "repo": "umu-launcher",
-        "rev": "bb5c870fe076e21fe60cb652b57365022fbfd77a",
+        "rev": "b6f5ef57365debb28713b5d0b76b0bc89e695c71",
         "type": "github"
       },
       "original": {
